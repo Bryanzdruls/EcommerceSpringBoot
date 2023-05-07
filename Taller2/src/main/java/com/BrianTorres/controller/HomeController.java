@@ -50,15 +50,54 @@ public class HomeController {
     }
 
     @PostMapping(value="/carrito")
-    public String carrito(@RequestParam Long id, @RequestParam Integer cantidad) {
+    public String carrito(@RequestParam Long id, @RequestParam Integer cantidad, Model model) {
         Carrito carrito = new Carrito();
         Producto producto = new Producto();
         int total=0;
 
         Optional<Producto> opProducto = productoService.get(id);
 
-        System.out.println("ah nuel doble a brr"+ opProducto.get());
-        System.out.println(cantidad);
+        producto = opProducto.get();
+
+        carrito.setCantidad(cantidad);
+        carrito.setValorPedido(producto.getPrecio());//precio unitario
+        carrito.setNombreProducto(producto.getNombre());
+        carrito.setTotalPorPedido((int)(cantidad*producto.getPrecio()));
+        carrito.setProducto(producto);
+
+        //validar que le producto no se añada 2 veces
+		Long idProducto=producto.getId();
+		boolean ingresado=detalle.stream().anyMatch(p -> p.getProducto().getId()==idProducto);
+		
+		if (!ingresado) {
+			detalle.add(carrito);
+		}
+        total = detalle.stream().mapToInt(dt ->dt.getTotalPorPedido ()).sum();
+
+        pedido.setTotal(total);
+        model.addAttribute("carrito", detalle);
+        model.addAttribute("pedido", pedido);
+        return "cliente/carrito";
+    }
+
+    @GetMapping("/eliminar/carrito/{id}")
+    public String eliminar(@PathVariable Long id,Model model){
+        //lista nueva
+        List<Carrito> CarroNuevo = new ArrayList<Carrito>();
+        int sum=0;
+        for (Carrito carrito : detalle) {
+            if (carrito.getProducto().getId()!=id) {
+                CarroNuevo.add(carrito);
+            }
+        }        
+        detalle = CarroNuevo;
+        
+        sum = detalle.stream().mapToInt(dt ->dt.getTotalPorPedido()).sum();
+        
+        pedido.setTotal(sum);
+        model.addAttribute("carrito", detalle);
+        model.addAttribute("pedido", pedido);
+        
         
         return "cliente/carrito";
     }

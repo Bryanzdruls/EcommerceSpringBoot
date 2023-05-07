@@ -53,16 +53,18 @@
                   <th scope="col">Precio</th>
                   <th scope="col">Cantidad</th>
                   <th scope="col">Total</th>
+                  <th scope="col">idProd</th>
                   <th scope="col">Acción</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td >Nombre</td>
-                  <td >Precio</td>
-                  <td>Cantidad</td>
-                  <td >Total</td>
-                  <td><a href="#" class="btn btn-danger">Quitar</a></td>
+                <tr th:each="detalle:${carrito}">
+                  <td th:text="${detalle.nombreProducto}">Nombre</td>
+                  <td th:text="${detalle.valorPedido}">Precio</td>
+                  <td th:text="${detalle.cantidad}">Cantidad</td>
+                  <td th:text="${detalle.totalPorPedido}">Total</td>
+                  <td th:text="${detalle.producto.id}">idProd</td>
+                  <td><a th:href="@{/eliminar/carrito/{id} (id=${detalle.producto.id})}" class="btn btn-danger">Quitar</a></td>
                 </tr>
               </tbody>
             </table>
@@ -72,7 +74,7 @@
             <h2 class="card-title">SUBTOTAL</h2>
 
             <ul class="list-group">
-              <li class="list-group-item"><h5>Total: $ 10</h5></li>
+              <li class="list-group-item"><h5 th:text="${pedido.total}">Total: $ 10</h5></li>
               <a href="resumenorden.html" class="btn btn-dark">Ver Orden</a>
             </ul>
           </div>

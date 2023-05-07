@@ -16,11 +16,27 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    private String nombreProducto;
+
+
     private Integer cantidad;
     private Integer valorPedido;
+    private Integer totalPorPedido;
+
 
     @ManyToOne
     private Pedido pedido;
+    
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    @ManyToOne
+	private Producto producto;
 
     //metodos
 
@@ -71,7 +87,21 @@ public class Carrito {
         setValorPedido(valorPedido);
         return this;
     }
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
 
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+    
+    public Integer getTotalPorPedido() {
+        return totalPorPedido;
+    }
+
+    public void setTotalPorPedido(Integer totalPorPedido) {
+        this.totalPorPedido = totalPorPedido;
+    }
     @Override
     public boolean equals(Object o) {
         if (o == this)
