@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Carrito {
     //atributos
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     private Integer cantidad;

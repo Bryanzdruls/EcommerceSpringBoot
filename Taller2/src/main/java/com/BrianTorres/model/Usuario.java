@@ -19,7 +19,7 @@ public class Usuario {
     //atributos
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id_user")
     private Long id;
     @NotEmpty(message =  "Debes especificar el usuario")

@@ -48,22 +48,20 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(Producto producto,@RequestParam("img") MultipartFile file) throws IOException{
+    public String guardar(Producto producto,@RequestParam("img") MultipartFile file) throws IOException{       
         producto.setOferta(false) ;
         Cliente u = new Cliente();
         u.setId(Long.parseLong("1"));       
         producto.setCliente(u);
+        
         //imagen
         if (producto.getId()==null) {
             //cuando se crea el producto
             String nombreImg =subirArchivo.guardarImagen(file);
             producto.setImagen(nombreImg);
-        } else {
-
+        }else{
             
         }
-
-
         productoService.save(producto);
         return "redirect:/producto/listar";
     }

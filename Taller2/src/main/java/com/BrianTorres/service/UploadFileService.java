@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UploadFileService {
-    private String carpeta="images//";
+    private String carpeta="imagen//";
 
     public String guardarImagen(MultipartFile file) throws IOException{
         if (!file.isEmpty()) {
@@ -26,7 +26,7 @@ public class UploadFileService {
         return "default.jpg";
     }
     public void borrarImagen(String nombre){
-        String ruta="images//";
+        String ruta="imagen//";
         File file = new File(ruta+nombre);
         file.delete();
     }

@@ -40,11 +40,6 @@ public class Cliente implements Serializable{
     
 
     private String rol;
-
-
-
-
-
     @NotEmpty(message = "Debes especificar el Nombre")
     private String nombre;
     @NotEmpty(message = "Debes especificar el Nombre")
