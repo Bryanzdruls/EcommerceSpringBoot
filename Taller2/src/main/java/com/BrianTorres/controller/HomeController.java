@@ -101,5 +101,12 @@ public class HomeController {
         
         return "cliente/carrito";
     }
+    @GetMapping(value="getCarrito")
+    public String getCarrito(Model model) {
+        model.addAttribute("carrito", detalle);
+        model.addAttribute("pedido", pedido);
+        return "cliente/carrito";
+    }
+    
     
 }
