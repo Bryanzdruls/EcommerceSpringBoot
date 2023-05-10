@@ -1,10 +1,14 @@
 package com.BrianTorres.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.BrianTorres.model.Carrito;
+import com.BrianTorres.model.Cliente;
 import com.BrianTorres.model.Pedido;
 import com.BrianTorres.model.Producto;
+import com.BrianTorres.service.ICarritoService;
+import com.BrianTorres.service.IClienteService;
+import com.BrianTorres.service.IPedidoService;
 import com.BrianTorres.service.IProductoService;
+
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -32,6 +42,13 @@ public class HomeController {
     //datos pedido
     Pedido pedido = new Pedido();
 
+    @Autowired
+    private IClienteService clienteService;
+    
+    @Autowired
+    private IPedidoService pedidoService;
+    @Autowired
+    private ICarritoService carritoService;
     
     @GetMapping("")
     public String home(Model model){
@@ -74,7 +91,7 @@ public class HomeController {
 		}
         total = detalle.stream().mapToInt(dt ->dt.getTotalPorPedido ()).sum();
 
-        pedido.setTotal(total);
+        pedido.setSubtotal(total);
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
         return "cliente/carrito";
@@ -94,10 +111,12 @@ public class HomeController {
         
         sum = detalle.stream().mapToInt(dt ->dt.getTotalPorPedido()).sum();
         
-        pedido.setTotal(sum);
+        
+        pedido.setSubtotal(sum);
+        
+
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
-        
         
         return "cliente/carrito";
     }
@@ -110,9 +129,42 @@ public class HomeController {
     
    @GetMapping("/pedido")
     public String verPedido(Model model){
+        Cliente cliente = clienteService.findById(Long.parseLong("1")).get();
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
+        model.addAttribute("cliente", cliente);
         return "cliente/resumenpedido";
+    }
+    @GetMapping("/guardarPedido")
+    public String guardarPedido(){
+        Date fechaDePedido = new Date();
+        pedido.fechaPedido(fechaDePedido);
+
+        //usuario que realiza la orden
+        Cliente cliente = clienteService.findById(Long.parseLong("1")).get();
+        pedido.setCliente(cliente);
+
+        pedido.setTotal(pedido.getSubtotal()+2000);
+        pedidoService.save(pedido);
+        
+
+        //guardar los detalles
+        for (Carrito carrito : detalle) {
+            carrito.setPedido(pedido);
+            carritoService.save(carrito);
+        }
+
+        //limpiar valores
+        pedido = new Pedido();
+        detalle.clear();
+        return "redirect:/"; 
+    }
+    @PostMapping("/buscarproducto")
+    public String buscarProducto(@RequestParam(value="nombre") String busqueda, Model model){
+        List<Producto> productos=productoService.findAll().stream()
+        .filter(p ->p.getNombre().contains(busqueda)).collect(Collectors.toList());
+        model.addAttribute("productos", productos);
+        return "cliente/home";
     }
     
 }

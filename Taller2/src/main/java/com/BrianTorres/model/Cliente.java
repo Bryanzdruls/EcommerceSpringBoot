@@ -1,7 +1,7 @@
 package com.BrianTorres.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,27 +30,27 @@ public class Cliente implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_user")
     private Long id;
-    @NotEmpty(message =  "Debes especificar el usuario")
+    //@NotEmpty(message =  "Debes especificar el usuario")
     private String user;
-    @NotEmpty(message =  "Debes especificar la contraseña")
+    //@NotEmpty(message =  "Debes especificar la contraseña")
     private String pass;
-    @NotEmpty(message = "Debes especificar el email")
+    //@NotEmpty(message = "Debes especificar el email")
     @Email
     private String email;
     
 
     private String rol;
-    @NotEmpty(message = "Debes especificar el Nombre")
+    //@NotEmpty(message = "Debes especificar el Nombre")
     private String nombre;
-    @NotEmpty(message = "Debes especificar el Nombre")
+    //@NotEmpty(message = "Debes especificar el Nombre")
     private String apellido;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "campo requerido")
+    //@NotNull(message = "campo requerido")
     private Date fechaNac;
-    @NotBlank(message = "campo obligatorio")
+    //@NotBlank(message = "campo obligatorio")
     private String direccion;
-    @NotNull(message = "ingrese su numero celular correctamente")
-    private Integer telefono;
+    //@NotNull(message = "ingrese su numero celular correctamente")
+    private String telefono;
     
 	@OneToMany(mappedBy = "cliente")
 	private List<Producto> productos;
@@ -78,7 +78,7 @@ public class Cliente implements Serializable{
     }
 
 
-    public Cliente(Long id, String user, String pass, String email, String rol, String nombre, String apellido, Date fechaNac, String direccion, Integer telefono, List<Producto> productos, List<Pedido> pedidos) {
+    public Cliente(Long id, String user, String pass, String email, String rol, String nombre, String apellido, Date fechaNac, String direccion, String telefono, List<Producto> productos, List<Pedido> pedidos) {
         this.id = id;
         this.user = user;
         this.pass = pass;
@@ -126,11 +126,11 @@ public class Cliente implements Serializable{
         this.direccion = direccion;
     }
 
-    public Integer getTelefono() {
+    public String getTelefono() {
         return this.telefono;
     }
 
-    public void setTelefono(Integer telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
@@ -154,7 +154,7 @@ public class Cliente implements Serializable{
         return this;
     }
 
-    public Cliente telefono(Integer telefono) {
+    public Cliente telefono(String telefono) {
         setTelefono(telefono);
         return this;
     }

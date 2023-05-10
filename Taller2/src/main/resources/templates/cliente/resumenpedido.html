@@ -62,9 +62,9 @@
               <h5 class="card-title">
                 DATOS PEDIDO
               </h5>
-              <h6>Nombre: </h6>
-              <h6 >Correo: </h6>
-              <h6 >Dirección</h6>
+              <h6 th:text="'Nombre Cliente: '+${cliente.nombre}">Nombre: </h6>
+              <h6 th:text="'Correo Cliente: '+ ${cliente.email}">Correo: </h6>
+              <h6 th:text="'direccion Cliente: '+ ${cliente.direccion}">Dirección</h6>
 
               <h5 class="card-title">
                 PRODUCTOS
@@ -99,8 +99,8 @@
           <h2 class="card-title">Resumen Pedido</h2>
 
           <ul class="list-group">
-            <li class="list-group-item"><h5 th:text="'Total: '+${pedido.total} " > Total:</h5></li>
-            <a href="#" class="btn btn-dark">Generar</a>
+            <li class="list-group-item"><h5 th:text="'Total: '+${pedido.subtotal} " > Total:</h5></li>
+            <a th:href="@{/guardarPedido}" class="btn btn-dark">Generar</a>
           </ul>
         </div>
       </div>

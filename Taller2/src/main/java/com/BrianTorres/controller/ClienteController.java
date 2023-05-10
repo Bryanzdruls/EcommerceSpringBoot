@@ -42,7 +42,7 @@ public class ClienteController {
     @PostMapping("/guardar")
     public String guardar(Cliente cliente){
         logger.info("Cliente registro: {}", cliente);
-        cliente.setRol("cliente");
+        cliente.setRol("CLIENTE");
         //cliente.setPass();
         clienteService.save(cliente);
         return "redirect:/";
@@ -50,8 +50,9 @@ public class ClienteController {
 
     @GetMapping("/login")
     public String login(){
-        return "login";
+        return "/cliente/login";
     }
+
     @PostMapping("/ingresar")
     public String ingresar( Cliente cliente , HttpSession httpSession){
         logger.info("Accesso : {}", cliente);

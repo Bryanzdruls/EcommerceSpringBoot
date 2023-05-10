@@ -27,13 +27,7 @@ public class Carrito {
     @ManyToOne
     private Pedido pedido;
     
-    public Producto getProducto() {
-        return producto;
-    }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
 
     @ManyToOne
 	private Producto producto;
@@ -101,6 +95,21 @@ public class Carrito {
 
     public void setTotalPorPedido(Integer totalPorPedido) {
         this.totalPorPedido = totalPorPedido;
+    }
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
     @Override
     public boolean equals(Object o) {
