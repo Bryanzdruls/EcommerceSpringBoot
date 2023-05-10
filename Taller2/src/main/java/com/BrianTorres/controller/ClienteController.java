@@ -54,14 +54,15 @@ public class ClienteController {
     }
 
     @PostMapping("/ingresar")
-    public String ingresar( Cliente cliente , HttpSession httpSession){
-        logger.info("Accesso : {}", cliente);
+    public String ingresar(Cliente cliente , HttpSession httpSession){
         Optional<Cliente> usuario = clienteService.findByEmail(cliente.getEmail());
+        logger.info("Accesso : {}", usuario);
+
         if (usuario.isPresent()) {
-			httpSession.setAttribute("idusuario", usuario.get().getId());
+			httpSession.setAttribute("idcliente", usuario.get().getId());
 			
-			if (usuario.get().getRol().equals("ADMIN")) {
-				return "redirect:/admin";
+			if (usuario.get().getRol().equalsIgnoreCase("ADMIN")) {
+				return "redirect:/administrador/home";
 			}else {
 				return "redirect:/";
 			}

@@ -25,6 +25,7 @@ import com.BrianTorres.service.IClienteService;
 import com.BrianTorres.service.IPedidoService;
 import com.BrianTorres.service.IProductoService;
 
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -51,8 +52,14 @@ public class HomeController {
     private ICarritoService carritoService;
     
     @GetMapping("")
-    public String home(Model model){
+    public String home(Model model, HttpSession session){
+        System.out.println("el id es:"+session.getAttribute("idcliente"));
+
+
+
         model.addAttribute("productos", productoService.findAll());
+        //sesion
+        model.addAttribute("sesion", session.getAttribute("idcliente"));
         return "cliente/home";
     }
 
@@ -121,27 +128,31 @@ public class HomeController {
         return "cliente/carrito";
     }
     @GetMapping(value="getCarrito")
-    public String getCarrito(Model model) {
+    public String getCarrito(Model model, HttpSession session) {
+
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
+
+        //sesion
+        model.addAttribute("sesion", session.getAttribute("idcliente"));
         return "cliente/carrito";
     }
     
    @GetMapping("/pedido")
-    public String verPedido(Model model){
-        Cliente cliente = clienteService.findById(Long.parseLong("1")).get();
+    public String verPedido(Model model,HttpSession session){
+        Cliente cliente = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
         model.addAttribute("cliente", cliente);
         return "cliente/resumenpedido";
     }
     @GetMapping("/guardarPedido")
-    public String guardarPedido(){
+    public String guardarPedido(HttpSession session){
         Date fechaDePedido = new Date();
         pedido.fechaPedido(fechaDePedido);
 
         //usuario que realiza la orden
-        Cliente cliente = clienteService.findById(Long.parseLong("1")).get();
+        Cliente cliente = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         pedido.setCliente(cliente);
 
         pedido.setTotal(pedido.getSubtotal()+2000);

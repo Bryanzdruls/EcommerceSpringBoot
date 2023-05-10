@@ -25,17 +25,18 @@
 <body>
 
   <!-- Navigation -->
-  <nav th:replace="~{/cliente/home_base :: navUser}">
-
-    </nav>
+  <nav th:replace="~{/cliente/home_base :: navUser}" th:if="${sesion==null}">
+  </nav>
+  <nav th:replace="~{/cliente/home_base :: navUserLogeado}" th:unless="${sesion==null}">
+  </nav>
 
     <!-- Page Content -->
     <div class="container">
 
       <!-- Jumbotron Header -->
       <header class="jumbotron my-4">
-        <h1 class="display-3">Bienvenido a Spring Ecommerce 2021</h1>
-        <p class="lead">Tu tienda de productos en Línea</p>
+        <h1 class="display-3">jotanan USme</h1>
+        <p class="lead">mario crack</p>
       </header>
 
       <!-- Page Features -->

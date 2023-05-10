@@ -24,7 +24,9 @@
 <body>
 
   <!-- Navigation -->
-  <nav th:replace="~{/cliente/home_base :: navUser}">
+  <nav th:replace="~{/cliente/home_base :: navUser}" th:if="${sesion==null}">
+  </nav>
+  <nav th:replace="~{/cliente/home_base :: navUserLogeado}" th:unless="${sesion==null}">
   </nav>
 
     <!-- Page Content -->

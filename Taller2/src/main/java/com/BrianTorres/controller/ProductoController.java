@@ -4,7 +4,8 @@ package com.BrianTorres.controller;
 import java.io.IOException;
 import java.util.Optional;
 
-//import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.BrianTorres.model.Cliente;
 import com.BrianTorres.model.Producto;
-
+import com.BrianTorres.service.IClienteService;
 import com.BrianTorres.service.IProductoService;
 import com.BrianTorres.service.UploadFileService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -28,13 +31,16 @@ import com.BrianTorres.service.UploadFileService;
 @RequestMapping("/producto")
 public class ProductoController {
     
-    //private final Logger logger = LoggerFactory.getLogger(ProductoController.class);
+    private final Logger logger = LoggerFactory.getLogger(ProductoController.class);
 
     @Autowired
     private IProductoService productoService;
 
     @Autowired
     private UploadFileService subirArchivo;
+
+    @Autowired
+    private IClienteService clienteService;
 
     @GetMapping("/listar")
     public String listar(Model model){
@@ -48,19 +54,20 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(Producto producto,@RequestParam("img") MultipartFile file) throws IOException{       
+    public String guardar(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException{       
         producto.setOferta(false) ;
-        Cliente u = new Cliente();
-        u.setId(Long.parseLong("1"));       
+        logger.info("el producto es {}",producto);
+        Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         producto.setCliente(u);
-        
+        System.out.println("el archivo es: "+file);
         //imagen
         if (producto.getId()==null) {
             //cuando se crea el producto
             String nombreImg =subirArchivo.guardarImagen(file);
+            logger.info("ahsi {}",nombreImg);
             producto.setImagen(nombreImg);
         }else{
-            
+        
         }
         productoService.save(producto);
         return "redirect:/producto/listar";
@@ -90,7 +97,7 @@ public class ProductoController {
         } else {
             //diff Imagen
             //eliminar cuando la imagen no sea por defecto
-            if (!p.getImagen().equals("default.jpg")) {
+            if(!p.getImagen().equals("default.jpg")) {
                 subirArchivo.borrarImagen(p.getImagen());
             } 
             String nombreImg =subirArchivo.guardarImagen(file);

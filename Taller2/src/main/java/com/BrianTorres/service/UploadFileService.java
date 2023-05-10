@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadFileService {
     private String carpeta="images//";
 
+    
     public String guardarImagen(MultipartFile file) throws IOException{
         if (!file.isEmpty()) {
             byte [] bytes=file.getBytes();
