@@ -14,7 +14,7 @@ import java.util.Objects;
 @Table(name="producto")
 public class Producto {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "Ingrese el nombre del producto")
     private String nombre;

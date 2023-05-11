@@ -56,10 +56,10 @@ public class ProductoController {
     @PostMapping("/guardar")
     public String guardar(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException{       
         producto.setOferta(false) ;
-        logger.info("el producto es {}",producto);
+
         Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         producto.setCliente(u);
-        System.out.println("el archivo es: "+file);
+        System.out.println("el archivo es: "+file.getOriginalFilename());
         //imagen
         if (producto.getId()==null) {
             //cuando se crea el producto

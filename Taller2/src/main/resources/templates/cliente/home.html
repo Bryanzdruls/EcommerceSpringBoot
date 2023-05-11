@@ -25,11 +25,11 @@
 <body>
 
   <!-- Navigation -->
-  <nav th:replace="~{/cliente/home_base :: navUser}" th:if="${sesion==null}">
-  </nav>
-  <nav th:replace="~{/cliente/home_base :: navUserLogeado}" th:unless="${sesion==null}">
-  </nav>
+  <div th:if="${sesion==null}" th:insert="~{/cliente/home_base :: navUser}"></div>
 
+  <div th:if="${sesion!=null}" th:insert="~{/cliente/home_base :: navUserLogeado}"></div>
+
+  
     <!-- Page Content -->
     <div class="container">
 
@@ -37,6 +37,7 @@
       <header class="jumbotron my-4">
         <h1 class="display-3">jotanan USme</h1>
         <p class="lead">mario crack</p>
+
       </header>
 
       <!-- Page Features -->

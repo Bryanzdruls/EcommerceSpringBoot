@@ -18,6 +18,7 @@ import com.BrianTorres.model.Pedido;
 import com.BrianTorres.service.IClienteService;
 import com.BrianTorres.service.IPedidoService;
 
+
 import jakarta.servlet.http.HttpSession;
 
 
@@ -94,8 +95,33 @@ public class ClienteController {
     }
     @GetMapping("/cerrarSesion")
     public String cerrarSesion(HttpSession httpSession){
-        httpSession.removeAttribute("idusuario");
+        httpSession.removeAttribute("idcliente");
         return "redirect:/";
+    }
+
+    @GetMapping("/compras")
+    public String obtenerCompras(HttpSession session, Model model){
+        //modee
+        model.addAttribute("sesion", session.getAttribute("idcliente"));
+        
+        Cliente c = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
+        List<Pedido> pedidos = pedidoService.findByCliente(c);
+        System.out.println(pedidos);
+        System.out.println(c.getId());
+        model.addAttribute("pedidos", pedidos);
+        return "/cliente/compras";
+    }
+    @GetMapping("/verDetalleCompra/{id}")
+    public String verDetalleCompra(@PathVariable Long id, HttpSession session, Model model){
+
+
+        Optional<Pedido> pedido = pedidoService.findById(id);
+        model.addAttribute("detalles", pedido.get().getCarrito());
+        //sesion
+        model.addAttribute("sesion", session.getAttribute("idcliente"));
+
+
+        return "/cliente/detallecompra";
     }
 
 }
