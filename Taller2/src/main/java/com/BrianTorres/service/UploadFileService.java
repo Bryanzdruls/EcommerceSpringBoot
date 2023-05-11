@@ -16,7 +16,7 @@ public class UploadFileService {
 
     
     public String guardarImagen(MultipartFile file) throws IOException{
-        /*if (!file.isEmpty()) {
+        if (!file.isEmpty()) {
             byte [] bytes=file.getBytes();
             Path path =  Paths.get(carpeta+file.getOriginalFilename());
             System.out.println(path.toAbsolutePath());
@@ -24,7 +24,7 @@ public class UploadFileService {
             return file.getOriginalFilename();
         } else {
             
-        }*/
+        }
         return "default.jpg";
     }
     public void borrarImagen(String nombre){

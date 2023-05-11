@@ -172,6 +172,7 @@ public class HomeController {
     }
     @PostMapping("/buscarproducto")
     public String buscarProducto(@RequestParam(value="nombre") String busqueda, Model model){
+        
         List<Producto> productos=productoService.findAll().stream()
         .filter(p ->p.getNombre().contains(busqueda)).collect(Collectors.toList());
         model.addAttribute("productos", productos);
