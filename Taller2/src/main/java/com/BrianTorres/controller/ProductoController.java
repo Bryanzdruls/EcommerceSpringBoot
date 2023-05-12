@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import com.BrianTorres.service.IProductoService;
 import com.BrianTorres.service.UploadFileService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 
 
@@ -49,14 +51,20 @@ public class ProductoController {
     }
 
     @GetMapping("/crear")
-    public String crear(){
+    public String crear(Model model){
+        Producto producto =new Producto();
+        model.addAttribute("producto", producto);
         return "producto/crear";
     }
 
     @PostMapping("/guardar")
-    public String guardar(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException{       
-        producto.setOferta(false) ;
+    public String guardar(@Valid Producto producto, @RequestParam("img") MultipartFile file, HttpSession session,BindingResult bindingResult, Model model) throws IOException{       
+        if(bindingResult.hasErrors()){
+                model.addAttribute("producto", producto);
+                return "producto/crear";
 
+        }
+        producto.setOferta(false) ;
         Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         producto.setCliente(u);
         System.out.println("el archivo es: "+file.getOriginalFilename());
