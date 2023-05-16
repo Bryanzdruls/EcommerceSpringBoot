@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.BrianTorres.service.IPedidoService;
 
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -36,12 +38,20 @@ public class ClienteController {
     private final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
     @GetMapping("/registro")
-    public String crear(){
+    public String crear(Model model){
+        Cliente cliente = new Cliente();
+        model.addAttribute("cliente", cliente);
         return "cliente/registro";
     }
     
     @PostMapping("/guardar")
-    public String guardar(Cliente cliente){
+    public String guardar(@Valid Cliente cliente,BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("cliente", cliente);
+            return "/cliente/registro";
+        }
+        
         logger.info("Cliente registro: {}", cliente);
         cliente.setRol("CLIENTE");
         //cliente.setPass();
@@ -55,7 +65,8 @@ public class ClienteController {
     }
 
     @PostMapping("/ingresar")
-    public String ingresar(Cliente cliente , HttpSession httpSession){
+    public String ingresar(Cliente cliente , HttpSession httpSession)
+    {
         Optional<Cliente> usuario = clienteService.findByEmail(cliente.getEmail());
         logger.info("Accesso : {}", usuario);
 

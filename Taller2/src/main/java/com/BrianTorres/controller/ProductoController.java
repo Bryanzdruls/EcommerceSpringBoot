@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.BrianTorres.model.Cliente;
@@ -58,11 +59,10 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@Valid Producto producto, @RequestParam("img") MultipartFile file, HttpSession session,BindingResult bindingResult, Model model) throws IOException{       
+    public String guardar(@RequestParam("imagen") MultipartFile file, @Valid Producto producto,  HttpSession session,SessionStatus estado,BindingResult bindingResult, Model model) throws IOException{       
         if(bindingResult.hasErrors()){
                 model.addAttribute("producto", producto);
                 return "producto/crear";
-
         }
         producto.setOferta(false) ;
         Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
@@ -78,6 +78,7 @@ public class ProductoController {
         
         }
         productoService.save(producto);
+        estado.setComplete();
         return "redirect:/producto/listar";
     }
 

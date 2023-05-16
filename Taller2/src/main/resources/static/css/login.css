@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
+
+:root {
+  --clr-neon: #14f7ff;
+  --clr-bg: #001414;
+  --font-size: 3rem;
+}
+
+*, 
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+body {
+
+    display: grid;
+    place-items: center;
+    background: var(--clr-bg);
+    color: var(--clr-neon);
+    font-family: "Balsamiq Sans";
+    overflow: hidden;
+  }
+#ingresar{
+    flex: auto;
+    text-align: center;
+}
