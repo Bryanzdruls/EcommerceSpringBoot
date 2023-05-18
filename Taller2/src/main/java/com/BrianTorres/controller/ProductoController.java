@@ -59,7 +59,14 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@RequestParam("imagen") MultipartFile file, @Valid Producto producto,  HttpSession session,SessionStatus estado,BindingResult bindingResult, Model model) throws IOException{       
+    public String guardar(@Valid Producto producto ,BindingResult bindingResult,  HttpSession session,SessionStatus estado, Model model, @RequestParam("imagen") MultipartFile file) throws IOException{       
+        if (!file.isEmpty()) {
+            String nombreImg =subirArchivo.guardarImagen(file);
+            logger.info("ahsi {}",nombreImg);
+            producto.setImagen(nombreImg);
+        }else{
+            producto.setImagen("default.jpg");
+        }
         if(bindingResult.hasErrors()){
                 model.addAttribute("producto", producto);
                 return "producto/crear";
@@ -67,16 +74,9 @@ public class ProductoController {
         producto.setOferta(false) ;
         Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         producto.setCliente(u);
-        System.out.println("el archivo es: "+file.getOriginalFilename());
+        //System.out.println("el archivo es: "+file.getOriginalFilename());
         //imagen
-        if (producto.getId()==null) {
-            //cuando se crea el producto
-            String nombreImg =subirArchivo.guardarImagen(file);
-            logger.info("ahsi {}",nombreImg);
-            producto.setImagen(nombreImg);
-        }else{
-        
-        }
+
         productoService.save(producto);
         estado.setComplete();
         return "redirect:/producto/listar";

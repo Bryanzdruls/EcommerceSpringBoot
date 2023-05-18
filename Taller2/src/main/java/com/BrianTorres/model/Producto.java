@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
@@ -20,18 +21,18 @@ public class Producto {
     private Long id;
     @NotEmpty(message = "Ingrese el nombre del producto")
     private String nombre;
-    //@NotEmpty(message = "Ingrese la descripcion del producto")
+    @NotEmpty(message = "Ingrese la descripcion del producto")
     private String descripcion;
-    //@NotEmpty(message = "Ingrese el codigo del producto")
+    @NotEmpty(message = "Ingrese el codigo del producto")
     private String codigo;
-    //@NotNull(message = "ingrese el precio del producto")
+    @NotNull(message = "ingrese el precio del producto")
     private Integer precio;
-    //@NotNull(message="ingrese la cantidad del producto")
+    @NotNull(message="ingrese la cantidad del producto")
     private Integer existencias;
     
     private boolean oferta;
     
-    @Size(max = 5 * 1024 * 1024, message = "La imagen no puede superar los 5MB")
+    //@Size(max = 5 * 1024 * 1024, message = "La imagen no puede superar los 5MB")
     private String imagen;
     
     
