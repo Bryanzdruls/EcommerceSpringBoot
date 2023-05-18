@@ -4,6 +4,8 @@ package com.BrianTorres.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
+
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -59,24 +61,38 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@RequestParam("imagen") MultipartFile file, @Valid Producto producto,  HttpSession session,SessionStatus estado,BindingResult bindingResult, Model model) throws IOException{       
+    public String guardar(@Valid Producto producto,BindingResult bindingResult,@RequestParam("imagen") MultipartFile file,   HttpSession session,SessionStatus estado, Model model) throws IOException{       
+        if(!validarExtension(file)&& !file.isEmpty()){
+            model.addAttribute("producto", producto);
+            return "producto/crear";
+        }
         if(bindingResult.hasErrors()){
+            if (bindingResult.hasFieldErrors("codigo")||
+                bindingResult.hasFieldErrors("nombre")||
+                bindingResult.hasFieldErrors("descripcion")||
+                bindingResult.hasFieldErrors("precio")||
+                bindingResult.hasFieldErrors("existencias")) {
                 model.addAttribute("producto", producto);
                 return "producto/crear";
         }
+            }else {
+                
+            
+        }
+        if (producto.getId()==null) {
+            //cuando se crea el producto
+            String nombreImg =subirArchivo.guardarImagen(file);
+            producto.setImagen(nombreImg);
+        }
+        
+        
         producto.setOferta(false) ;
         Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         producto.setCliente(u);
         System.out.println("el archivo es: "+file.getOriginalFilename());
         //imagen
-        if (producto.getId()==null) {
-            //cuando se crea el producto
-            String nombreImg =subirArchivo.guardarImagen(file);
-            logger.info("ahsi {}",nombreImg);
-            producto.setImagen(nombreImg);
-        }else{
-        
-        }
+
+
         productoService.save(producto);
         estado.setComplete();
         return "redirect:/producto/listar";
@@ -128,5 +144,13 @@ public class ProductoController {
         } 
         productoService.delete(id);
         return "redirect:/producto/listar";
+    }
+    public Boolean validarExtension(MultipartFile file){
+        try {
+            ImageIO.read(file.getInputStream()).toString();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
