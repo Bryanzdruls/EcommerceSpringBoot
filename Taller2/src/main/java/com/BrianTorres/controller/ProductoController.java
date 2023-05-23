@@ -6,8 +6,7 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+
 //import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +35,6 @@ import jakarta.validation.Valid;
 @RequestMapping("/producto")
 public class ProductoController {
     
-    private final Logger logger = LoggerFactory.getLogger(ProductoController.class);
 
     @Autowired
     private IProductoService productoService;
@@ -110,7 +108,18 @@ public class ProductoController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(Producto producto, @RequestParam("img") MultipartFile file) throws IOException{
+    public String actualizar(@Valid Producto producto,BindingResult bindingResult, @RequestParam("img") MultipartFile file, Model model) throws IOException{
+        if(bindingResult.hasErrors()){
+            if (bindingResult.hasFieldErrors("codigo")||
+                bindingResult.hasFieldErrors("nombre")||
+                bindingResult.hasFieldErrors("descripcion")||
+                bindingResult.hasFieldErrors("precio")||
+                bindingResult.hasFieldErrors("existencias")) {
+                model.addAttribute("producto", producto);
+                return "producto/edit";
+             }
+           
+        }
         Producto p = new Producto();
         p=productoService.get(producto.getId()).get();
 

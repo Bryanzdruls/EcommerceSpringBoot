@@ -46,8 +46,13 @@ public class ClienteController {
     
     @PostMapping("/guardar")
     public String guardar(@Valid Cliente cliente,BindingResult bindingResult, Model model){
-        if (bindingResult.hasErrors()) {
-
+        Optional<Cliente> clienteConEmail = clienteService.findByEmail(cliente.getEmail());
+        Boolean emailExiste = clienteConEmail.isPresent();
+        if (bindingResult.hasErrors() || emailExiste){
+            if(emailExiste){
+                model.addAttribute("emailError", emailExiste);
+                return "/cliente/registro";
+            }
             model.addAttribute("cliente", cliente);
             return "/cliente/registro";
         }
@@ -56,7 +61,7 @@ public class ClienteController {
         cliente.setRol("CLIENTE");
         //cliente.setPass();
         clienteService.save(cliente);
-        return "redirect:/";
+        return "redirect:/cliente/login";
     }
 
     @GetMapping("/login")
