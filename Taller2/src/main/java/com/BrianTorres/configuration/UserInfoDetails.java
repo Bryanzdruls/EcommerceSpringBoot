@@ -1,4 +1,4 @@
-/*package com.BrianTorres.configuration;
+package com.BrianTorres.configuration;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,18 +12,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.BrianTorres.model.Cliente;
 
 public class UserInfoDetails implements UserDetails{
-    private String usuario;
+    
+    private String name;
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public UserInfoDetails (Cliente cliente){
-        usuario=cliente.getEmail();
-        password=cliente.getPass();
-        authorities=Arrays.stream(cliente.getRol().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+    public UserInfoDetails(Cliente userInfo) {
+        name=userInfo.getEmail();
+        password=userInfo.getPass();
+        authorities= Arrays.stream(userInfo.getRol().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,7 +37,7 @@ public class UserInfoDetails implements UserDetails{
 
     @Override
     public String getUsername() {
-        return usuario;
+        return name;
     }
 
     @Override
@@ -60,4 +60,3 @@ public class UserInfoDetails implements UserDetails{
         return true;
     }
 }
-*/

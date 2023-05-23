@@ -1,4 +1,4 @@
-/*package com.BrianTorres.configuration;
+package com.BrianTorres.configuration;
 
 import java.util.Optional;
 
@@ -27,4 +27,3 @@ public class UserInfoDetailsService implements UserDetailsService{
 
     
 }
-*/

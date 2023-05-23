@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.BrianTorres.dao.IClienteRepo;
@@ -13,6 +14,8 @@ import com.BrianTorres.model.Cliente;
 public class IClienteImp implements IClienteService {
     @Autowired
     private IClienteRepo clienteRepo;
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
     public List<Cliente> findAll() {
@@ -26,12 +29,24 @@ public class IClienteImp implements IClienteService {
 
     @Override
     public Cliente save(Cliente cliente) {
+        cliente.setPass(encoder.encode(cliente.getPass()));
         return clienteRepo.save(cliente);
     }
 
     @Override
     public Optional<Cliente> findByEmail(String email) {
         return clienteRepo.findByEmail(email);
+    }
+
+
+
+    @Override
+    public void encriptar() {
+        Cliente admin=clienteRepo.findById(Long.parseLong("1")).get();
+        if (!admin.getPass().contains("$")) {
+            admin.setPass(encoder.encode(admin.getPass()));
+        }
+        clienteRepo.save(admin);
     }
     
 }

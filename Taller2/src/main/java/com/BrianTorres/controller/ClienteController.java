@@ -34,6 +34,7 @@ public class ClienteController {
     @Autowired
     private IPedidoService pedidoService;
 
+    
         
     private final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
@@ -56,7 +57,7 @@ public class ClienteController {
             model.addAttribute("cliente", cliente);
             return "/cliente/registro";
         }
-        
+
         logger.info("Cliente registro: {}", cliente);
         cliente.setRol("CLIENTE");
         //cliente.setPass();
@@ -66,6 +67,7 @@ public class ClienteController {
 
     @GetMapping("/login")
     public String login(){
+        clienteService.encriptar();
         return "/cliente/login";
     }
 
@@ -112,7 +114,7 @@ public class ClienteController {
     @GetMapping("/cerrarSesion")
     public String cerrarSesion(HttpSession httpSession){
         httpSession.removeAttribute("idcliente");
-        return "redirect:/";
+        return "redirect:/cliente/login";
     }
 
     @GetMapping("/compras")
