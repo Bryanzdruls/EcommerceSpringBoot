@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Taller2Application",
+            "request": "launch",
+            "mainClass": "com.BrianTorres.Taller2Application",
+            "projectName": "Taller2"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Taller2Application<Taller2>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.BrianTorres.Taller2.Taller2Application",
+            "projectName": "Taller2",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=47169 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=Taller2"
+        }
+    ]
+}

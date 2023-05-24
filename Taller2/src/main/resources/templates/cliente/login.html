@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <title>Spring eCommerce</title>
+    <link th:href="@{/css/login.css}" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/}">Spring Ecommerce</a>
+
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" thhref="@{/cliente/login}">Login</a>
+          </li>
+        </ul>
+      </div>    
+    </div>
+  </nav>
+    <div class="container">
+
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-md-8" >
+              <div id ="ingresar"class="card-body">
+                <h2>Ingresar</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+    		<div th:if="${param.error}" class="alert alert-info">
+          Invalid username or password.</div>
+
+        
+        <form  th:action="@{/cliente/login}" method="post">
+          <div class="form-group">
+            <label for="email"> Email:  </label>      
+            <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese su email" required > 
+          </div>
+    
+          <div class="form-group">
+            <label for="pwd"> Contraseña:</label>
+            <input type="password"  class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>       
+          </div>
+    
+          <div class="form-group">
+            <div class="col-sm-2">
+              <button type="submit" class="btn btn-dark"> <span class="glyphicon glyphicon-ok"></span> Ingresar</button>
+            </div>      
+          </div>    
+        </form>
+        <a th:href="@{/cliente/registro}" class="card-link">Si aún no tiene cuenta aqui puede registrarse</a>
+      </div>
+
+
+      <footer th:replace="~{/cliente/home_base :: footerUser}">
+      </footer>
+</body>
+</html>
