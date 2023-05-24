@@ -11,4 +11,5 @@ public interface IClienteService {
 	Optional<Cliente> findById(Long id);
 	Cliente save (Cliente cliente);
 	Optional<Cliente> findByEmail(String email);
+	void encriptar();
 }

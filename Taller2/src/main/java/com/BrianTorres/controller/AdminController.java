@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.BrianTorres.model.Producto;
-import com.BrianTorres.service.ICarritoService;
+
 import com.BrianTorres.service.IClienteService;
 import com.BrianTorres.service.IPedidoService;
 import com.BrianTorres.service.IProductoService;
@@ -24,8 +24,8 @@ public class AdminController {
     private IClienteService clienteService;
     @Autowired
     private IPedidoService pedidoService;
-    @Autowired
-    private ICarritoService carritoService;
+    //@Autowired
+   // private ICarritoService carritoService;
     @GetMapping("/home")
     public String home(Model model){
         List<Producto> productos = productoService.findAll();

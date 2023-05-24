@@ -34,6 +34,7 @@ public class ClienteController {
     @Autowired
     private IPedidoService pedidoService;
 
+    
         
     private final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
@@ -46,21 +47,27 @@ public class ClienteController {
     
     @PostMapping("/guardar")
     public String guardar(@Valid Cliente cliente,BindingResult bindingResult, Model model){
-        if (bindingResult.hasErrors()) {
-
+        Optional<Cliente> clienteConEmail = clienteService.findByEmail(cliente.getEmail());
+        Boolean emailExiste = clienteConEmail.isPresent();
+        if (bindingResult.hasErrors() || emailExiste){
+            if(emailExiste){
+                model.addAttribute("emailError", emailExiste);
+                return "/cliente/registro";
+            }
             model.addAttribute("cliente", cliente);
             return "/cliente/registro";
         }
-        
+
         logger.info("Cliente registro: {}", cliente);
         cliente.setRol("CLIENTE");
         //cliente.setPass();
         clienteService.save(cliente);
-        return "redirect:/";
+        return "redirect:/cliente/login";
     }
 
     @GetMapping("/login")
     public String login(){
+        clienteService.encriptar();
         return "/cliente/login";
     }
 
@@ -107,7 +114,7 @@ public class ClienteController {
     @GetMapping("/cerrarSesion")
     public String cerrarSesion(HttpSession httpSession){
         httpSession.removeAttribute("idcliente");
-        return "redirect:/";
+        return "redirect:/cliente/login";
     }
 
     @GetMapping("/compras")

@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
@@ -31,8 +30,7 @@ public class Producto {
     private Integer existencias;
     
     private boolean oferta;
-    
-    //@Size(max = 5 * 1024 * 1024, message = "La imagen no puede superar los 5MB")
+
     private String imagen;
     
     
