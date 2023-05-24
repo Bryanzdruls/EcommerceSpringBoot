@@ -83,7 +83,7 @@ public class ProductoController {
             producto.setImagen(nombreImg);
         }
         
-    
+        
         producto.setOferta(false) ;
         Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         producto.setCliente(u);
