@@ -32,7 +32,7 @@ public class Seguridad{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/images/**","/cliente/ingresar","/css/**","/cliente/guardar","/cliente/registro", "/cliente/login").permitAll()
+                .requestMatchers("/static/**","/images/**","/cliente/ingresar","/css/**","/cliente/guardar","/cliente/registro", "/cliente/login").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/**")
                 .authenticated().and().formLogin(form -> form

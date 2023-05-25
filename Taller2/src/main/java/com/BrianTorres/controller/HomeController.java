@@ -40,6 +40,9 @@ public class HomeController {
     //para almacenar los detalles de la orden
     List<Carrito> detalle = new ArrayList<Carrito>();
 
+
+    //Array id pal carrito
+    List<Long> idProductos = new ArrayList<Long>();
     //datos pedido
     Pedido pedido = new Pedido();
 
@@ -55,8 +58,7 @@ public class HomeController {
     public String home(Model model, HttpSession session){
         System.out.println("el id es:"+session.getAttribute("idcliente"));
 
-
-
+        
         model.addAttribute("productos", productoService.findAll());
         //sesion
         model.addAttribute("sesion", session.getAttribute("idcliente"));
@@ -74,7 +76,8 @@ public class HomeController {
     }
 
     @PostMapping(value="/carrito")
-    public String carrito(@RequestParam Long id, @RequestParam Integer cantidad, Model model) {
+    public String carrito(@RequestParam Long id, @RequestParam Integer cantidad, Model model, HttpSession session) {
+        
         Carrito carrito = new Carrito();
         Producto producto = new Producto();
         int total=0;
@@ -82,6 +85,15 @@ public class HomeController {
         Optional<Producto> opProducto = productoService.get(id);
 
         producto = opProducto.get();
+        Long idProductoSession = producto.getId();
+        Boolean cantidadExedida=false;
+        idProductos.add(idProductoSession);
+        if (producto.getExistencias()<cantidad) {
+            cantidadExedida=true;
+            model.addAttribute("errorCantidad", cantidadExedida);
+            model.addAttribute("producto", productoService.get(id).get());
+            return "cliente/productoHome";
+        }
 
         carrito.setCantidad(cantidad);
         carrito.setValorPedido(producto.getPrecio());//precio unitario
@@ -142,6 +154,7 @@ public class HomeController {
     public String verPedido(Model model,HttpSession session){
         Cliente cliente = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         model.addAttribute("carrito", detalle);
+
         model.addAttribute("pedido", pedido);
         model.addAttribute("cliente", cliente);
         return "cliente/resumenpedido";
@@ -151,16 +164,31 @@ public class HomeController {
         Date fechaDePedido = new Date();
         pedido.fechaPedido(fechaDePedido);
 
+
         //usuario que realiza la orden
         Cliente cliente = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         pedido.setCliente(cliente);
+        
+        System.out.println( detalle.toString());
 
+        for (Carrito carrito1 : detalle) {
+            for (int i=0;i<idProductos.size();i++) {
+                Producto producto =productoService.get(idProductos.get(i)).get();
+                if (carrito1.getProducto().getId().equals(idProductos.get(i))) {
+                    producto.restarUnidades(carrito1.getCantidad());
+                }
+            } 
+        }
+
+        idProductos.clear();
+        
         pedido.setTotal(pedido.getSubtotal()+2000);
         pedidoService.save(pedido);
         
 
         //guardar los detalles
         for (Carrito carrito : detalle) {
+            
             carrito.setPedido(pedido);
             carritoService.save(carrito);
         }

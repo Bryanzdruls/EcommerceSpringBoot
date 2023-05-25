@@ -186,6 +186,11 @@ public class Producto {
             ", imagen='" + getImagen() + "'" +
             "}";
     }
-
+    public boolean sinExistencia() {
+        return this.existencias <= 0;
+    }
+    public void restarUnidades(int res) {
+        this.existencias -= res;
+    }
     
 }

@@ -19,9 +19,9 @@ public class UploadFileService {
 
         if (!imagen.isEmpty())
         {
-            Path malo=Paths.get("Taller2\\src\\main\\resources\\static\\images//");
-            //Path temporal=Paths.get("C:\\Users\\eltio\\OneDrive\\Escritorio\\taller2Final\\Taller2\\src\\main\\resources\\static\\images");
-            //Path carpeta=Paths.get("C:\\ImagenesFinalSpring");
+            Path malo=Paths.get("src/main/resources/static/images");
+            Path temporal=Paths.get("Taller2/images");
+            Path carpeta=Paths.get("images");
             String rutaAbsoluta=malo.toFile().getAbsolutePath();
             //String rutaAbsolutaFunciona=carpeta.toFile().getAbsolutePath();
             System.out.println(malo.toAbsolutePath());
@@ -36,6 +36,7 @@ public class UploadFileService {
                     byte[] bytesImgNofunciona = imagen.getBytes();
                     Path rutacompletaNoFuncional = Paths.get(rutaAbsoluta+ "//" + imagen.getOriginalFilename());
                     Files.write(rutacompletaNoFuncional, bytesImgNofunciona);
+                    
 
                     return imagen.getOriginalFilename();
                 } catch (Exception e) {
@@ -50,7 +51,7 @@ public class UploadFileService {
     }
     public void borrarImagen(String nombre){
         //String ruta="C:\\Users\\eltio\\Downloads\\Taller2\\Taller2\\images";
-        String ruta="Taller2\\src\\main\\resources\\static\\images//";
+        String ruta="src//main//resources//static/images";
         File file = new File(ruta+nombre);
         file.delete();
     }
