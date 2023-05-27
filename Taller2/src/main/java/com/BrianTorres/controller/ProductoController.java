@@ -79,7 +79,7 @@ public class ProductoController {
         }
         if (producto.getId()==null) {
             //cuando se crea el producto
-            String nombreImg =subirArchivo.guardarImagen(file);
+            String nombreImg=subirArchivo.guardarImagen(file, producto);
             producto.setImagen(nombreImg);
         }
         
@@ -87,7 +87,7 @@ public class ProductoController {
         producto.setOferta(false) ;
         Cliente u = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         producto.setCliente(u);
-        System.out.println("el archivo es: "+file.getOriginalFilename());
+       
         //imagen
 
 
@@ -134,7 +134,7 @@ public class ProductoController {
             if(!p.getImagen().equals("default.jpg")) {
                 subirArchivo.borrarImagen(p.getImagen());
             } 
-            String nombreImg =subirArchivo.guardarImagen(file);
+            String nombreImg =subirArchivo.guardarImagen(file, producto);
             producto.setImagen(nombreImg);
         }
         producto.setCliente(p.getCliente());          

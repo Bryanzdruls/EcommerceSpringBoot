@@ -37,8 +37,19 @@ public class Pedido {
     @ManyToOne
     private Cliente cliente;
 
+    @ManyToOne
+    private Domiciliario domi;
 
 
+
+
+    public Domiciliario getDomi() {
+        return domi;
+    }
+
+    public void setDomi(Domiciliario domi) {
+        this.domi = domi;
+    }
 
     public Pedido() {
     }

@@ -12,4 +12,5 @@ public interface IClienteService {
 	Cliente save (Cliente cliente);
 	Optional<Cliente> findByEmail(String email);
 	void encriptar();
+    void insertarAdmin();
 }

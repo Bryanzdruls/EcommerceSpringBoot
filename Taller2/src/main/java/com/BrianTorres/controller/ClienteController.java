@@ -67,6 +67,10 @@ public class ClienteController {
 
     @GetMapping("/login")
     public String login(){
+        List<Cliente> clientes= clienteService.findAll();
+        if (clientes.isEmpty()) {
+            clienteService.insertarAdmin();
+        }
         clienteService.encriptar();
         return "/cliente/login";
     }

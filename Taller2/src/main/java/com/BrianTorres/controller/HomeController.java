@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.BrianTorres.model.Carrito;
 import com.BrianTorres.model.Cliente;
+import com.BrianTorres.model.Domiciliario;
 import com.BrianTorres.model.Pedido;
 import com.BrianTorres.model.Producto;
+import com.BrianTorres.service.EnviarEmail;
 import com.BrianTorres.service.ICarritoService;
 import com.BrianTorres.service.IClienteService;
+import com.BrianTorres.service.IDomiciliarioService;
 import com.BrianTorres.service.IPedidoService;
 import com.BrianTorres.service.IProductoService;
 
@@ -36,6 +39,9 @@ public class HomeController {
     
     @Autowired
     private IProductoService productoService;
+
+    @Autowired
+    private IDomiciliarioService domiciliarioService;
 
     //para almacenar los detalles de la orden
     List<Carrito> detalle = new ArrayList<Carrito>();
@@ -53,6 +59,8 @@ public class HomeController {
     private IPedidoService pedidoService;
     @Autowired
     private ICarritoService carritoService;
+    @Autowired
+    private EnviarEmail envioEmail;
     
     @GetMapping("")
     public String home(Model model, HttpSession session){
@@ -193,9 +201,20 @@ public class HomeController {
             carritoService.save(carrito);
         }
 
+        envioEmail.sendListEmail(cliente, detalle);
+        //se asigna el domiciliario
+        Domiciliario domi = domiciliarioService.findById(1L).get();
+        pedido.setDomi(domi);
+        domi.setPedidosAsignados(pedido);
+        envioEmail.emailParaDomiciliario(domi, pedido);
+
+
+
         //limpiar valores
         pedido = new Pedido();
+       
         detalle.clear();
+        
         return "redirect:/"; 
     }
     @PostMapping("/buscarproducto")
@@ -206,5 +225,7 @@ public class HomeController {
         model.addAttribute("productos", productos);
         return "cliente/home";
     }
+
+    
     
 }

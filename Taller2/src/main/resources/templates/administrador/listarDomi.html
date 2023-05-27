@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Spring eCommerce</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+  
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav th:replace="~{/administrador/homeBase :: nav}"></nav>
+
+<!-- Page Content -->
+<div class="container">
+
+
+  <!-- Page Heading/Breadcrumbs -->
+  <h1 class="mt-4 mb-3">
+    Spring eCommerce <small>Domiciliarios</small>
+  </h1>
+
+  <ol th:fragment="navPro"class="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/administrador/home}">Home</a></li>
+    <li class="breadcrumb-item active">Ver Domiciliarios</li>
+  </ol>
+
+  <a class="btn btn-primary" th:href="@{/administrador/domiciliarios}" > Crear Domiciliarios</a>
+  <h2>Productos</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Email</th>
+        <th scope="col">Pedidos Asignados</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="domi:${domiciliario}">
+        <td   th:text="${domi.id}"></td>
+        <td   th:text="${domi.nombre}"></td>
+        <td   th:text="${domi.apellido}"></td>
+        <td   th:text="${domi.email}"></td>
+
+      </tr>       
+    </tbody>
+  </table>
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer th:replace="~{administrador/homeBase :: footer}">
+</footer>
+
+
+</html>
