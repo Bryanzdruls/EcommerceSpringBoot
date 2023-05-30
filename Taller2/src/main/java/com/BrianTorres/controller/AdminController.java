@@ -63,13 +63,20 @@ public class AdminController {
     @GetMapping("/listarDomiciliarios")  
     public String listarDomi(Model model){
         model.addAttribute("domiciliario", domiciliarioService.findAll());
+        model.addAttribute("errorDomi", false);
         return "administrador/listarDomi";   
     }
     @GetMapping("/domiciliarios")
     public String crearDomiciliario(Model model){
-        Domiciliario domi= new Domiciliario();
-        model.addAttribute("domiciliario", domi);
-        return "administrador/domiciliarios";
+        if (domiciliarioService.findAll().isEmpty()) {
+            Domiciliario domi= new Domiciliario();
+            model.addAttribute("domiciliario", domi);
+            return "administrador/domiciliarios";
+        }else{
+            model.addAttribute("errorDomi", !domiciliarioService.findAll().isEmpty());
+            model.addAttribute("domiciliario", domiciliarioService.findAll());
+            return "administrador/listarDomi";
+        }
     }
 
     @PostMapping("/guardarDomiciliario")

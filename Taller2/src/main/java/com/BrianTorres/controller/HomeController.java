@@ -30,6 +30,7 @@ import com.BrianTorres.service.IDomiciliarioService;
 import com.BrianTorres.service.IPedidoService;
 import com.BrianTorres.service.IProductoService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -179,7 +180,7 @@ public class HomeController {
         return "cliente/resumenpedido";
     }
     @GetMapping("/guardarPedido")
-    public String guardarPedido(HttpSession session){
+    public String guardarPedido(HttpSession session, HttpServletResponse response){
 
 
         Date fechaDePedido = new Date();
@@ -235,7 +236,11 @@ public class HomeController {
         envioEmail.emailParaDomiciliario(domi, pedido);
 
         String mensaje ="";
+        // Establecer el tipo de contenido de la respuesta
+        response.setContentType("application/pdf");
 
+        // Indicar al navegador que descargue el archivo con un nombre específico
+        response.setHeader("Content-Disposition", "attachment; factura.pdf");
         for (Carrito carrito : detalle) {
             mensaje = mensaje +(
                 "Nombre : "+carrito.getNombreProducto()+". "
@@ -243,9 +248,10 @@ public class HomeController {
                 +". Cantidad : "+carrito.getCantidad()+" unidades.\n");
         }
         try {
-            crearPdf.generatePdf(mensaje, "C:/Users/eltio/Downloads/prueba.pdf");
+            crearPdf.generatePdf(mensaje, detalle, response);
+            
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("error: "+e);
         }
 
         //limpiar valores

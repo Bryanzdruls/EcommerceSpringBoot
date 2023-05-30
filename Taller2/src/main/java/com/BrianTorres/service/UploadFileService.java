@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.junit.Ignore;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ public class UploadFileService {
         {
             String folder ="Taller2/src/main/resources/static/images/";
     
+
             if (imagen.getContentType().equals("image/jpeg") || imagen.getContentType().equals("image/png"))
             {             
 

@@ -36,6 +36,7 @@
 
   <a class="btn btn-primary" th:href="@{/administrador/domiciliarios}" > Crear Domiciliarios</a>
   <h2>Productos</h2>
+  <h2 th:if="${errorDomi}" style="color: red;">Ya existe un domiciliario.</h2>
   <table class="table">
     <thead>
       <tr>
@@ -43,7 +44,6 @@
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
         <th scope="col">Email</th>
-        <th scope="col">Pedidos Asignados</th>
       </tr>
     </thead>
     <tbody>
