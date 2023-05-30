@@ -46,6 +46,13 @@ public class Domiciliario {
         this.email = email;
         this.pedidosAsignados = pedidosAsignados;
     }
+    public Domiciliario(Long id, String nombre, String apellido, String email, Pedido pedidoUnitario) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        pedidosAsignados.add(pedidoUnitario);
+    }
 
     public Long getId() {
         return this.id;

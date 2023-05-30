@@ -3,7 +3,6 @@ package com.BrianTorres.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.domain.JpaSort.Path;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -36,9 +34,9 @@ public class Seguridad implements WebMvcConfigurer{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/images/**","/cliente/ingresar","/css/**","/cliente/guardar","/cliente/registro", "/cliente/login").permitAll()
-                .anyRequest()
-                .authenticated().and().formLogin(form -> form
+                .requestMatchers("/cliente/ingresar","/css/**","/cliente/guardar","/cliente/registro", "/cliente/login").permitAll()
+                .requestMatchers("/images/**").permitAll()
+                .anyRequest().authenticated().and().formLogin(form -> form
                 .loginPage("/cliente/login")
                     .permitAll()
                     .usernameParameter("email")

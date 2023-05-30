@@ -26,12 +26,25 @@ public class EnviarEmail {
     public void sendListEmail(Cliente cliente, List<Carrito> detalle){
         MimeMessage message = javaMailSender.createMimeMessage();
         Cliente Admin = clienteService.findById(Long.parseLong("1")).get();
+
+        
+        String mensaje= "";
+        
+        for (Carrito carrito : detalle) {
+            mensaje = mensaje +(
+                "Nombre : "+carrito.getNombreProducto()+". "
+                +"Descripcion : "+ carrito.getProducto().getDescripcion()
+                +". Cantidad : "+carrito.getCantidad()+" unidades.\n");
+        }
+
+
+
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("eltiobryanz@gmail.com");
+            helper.setFrom(Admin.getEmail());
             helper.setTo(cliente.getEmail());
             helper.setSubject("Prueba email Automatico");
-            helper.setText("Usted compro: "
+            helper.setText("Usted compro: \n"+mensaje
                             
             
             );
@@ -45,7 +58,7 @@ public class EnviarEmail {
         Cliente Admin = clienteService.findById(Long.parseLong("1")).get();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("eltiobryanz@gmail.com");
+            helper.setFrom(Admin.getEmail());
             helper.setTo(domiciliario.getEmail());
             helper.setSubject("Envio pendiente");
             helper.setText("HOLA "+domiciliario.getNombre()+" "+domiciliario.getApellido()+

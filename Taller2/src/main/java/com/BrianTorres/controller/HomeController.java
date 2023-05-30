@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import java.util.stream.Collectors;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import com.BrianTorres.model.Cliente;
 import com.BrianTorres.model.Domiciliario;
 import com.BrianTorres.model.Pedido;
 import com.BrianTorres.model.Producto;
+import com.BrianTorres.service.CrearPdf;
 import com.BrianTorres.service.EnviarEmail;
 import com.BrianTorres.service.ICarritoService;
 import com.BrianTorres.service.IClienteService;
@@ -51,6 +53,9 @@ public class HomeController {
     List<Long> idProductos = new ArrayList<Long>();
     //datos pedido
     Pedido pedido = new Pedido();
+    
+    @Autowired
+    private CrearPdf crearPdf;
 
     @Autowired
     private IClienteService clienteService;
@@ -109,6 +114,7 @@ public class HomeController {
         carrito.setTotalPorPedido((int)(cantidad*producto.getPrecio()));
         carrito.setProducto(producto);
 
+
         //validar que le producto no se añada 2 veces
 		Long idProducto=producto.getId();
 		boolean ingresado=detalle.stream().anyMatch(p -> p.getProducto().getId()==idProducto);
@@ -121,6 +127,8 @@ public class HomeController {
         pedido.setSubtotal(total);
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
+        //sesion
+        model.addAttribute("sesion", session.getAttribute("idcliente"));
         return "cliente/carrito";
     }
 
@@ -152,9 +160,10 @@ public class HomeController {
 
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
+    //sesion
+    model.addAttribute("sesion", session.getAttribute("idcliente"));
+        
 
-        //sesion
-        model.addAttribute("sesion", session.getAttribute("idcliente"));
         return "cliente/carrito";
     }
     
@@ -165,14 +174,21 @@ public class HomeController {
 
         model.addAttribute("pedido", pedido);
         model.addAttribute("cliente", cliente);
+        //sesion
+        model.addAttribute("sesion", session.getAttribute("idcliente"));
         return "cliente/resumenpedido";
     }
     @GetMapping("/guardarPedido")
     public String guardarPedido(HttpSession session){
+
+
         Date fechaDePedido = new Date();
         pedido.fechaPedido(fechaDePedido);
 
 
+
+
+        
         //usuario que realiza la orden
         Cliente cliente = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         pedido.setCliente(cliente);
@@ -200,15 +216,37 @@ public class HomeController {
             carrito.setPedido(pedido);
             carritoService.save(carrito);
         }
-
         envioEmail.sendListEmail(cliente, detalle);
+
+
         //se asigna el domiciliario
-        Domiciliario domi = domiciliarioService.findById(1L).get();
+        Optional<Domiciliario> domiOptional= domiciliarioService.findById(1l); 
+        Domiciliario domi;
+        if (!domiOptional.isPresent()) {
+            domiciliarioService.defaultDomi(pedido);
+            domi =domiciliarioService.findById(1l).get(); 
+        }else{
+            domi = domiOptional.get();
+        }
+        
+        
         pedido.setDomi(domi);
         domi.setPedidosAsignados(pedido);
         envioEmail.emailParaDomiciliario(domi, pedido);
 
+        String mensaje ="";
 
+        for (Carrito carrito : detalle) {
+            mensaje = mensaje +(
+                "Nombre : "+carrito.getNombreProducto()+". "
+                +"Descripcion : "+ carrito.getProducto().getDescripcion()
+                +". Cantidad : "+carrito.getCantidad()+" unidades.\n");
+        }
+        try {
+            crearPdf.generatePdf(mensaje, "C:/Users/eltio/Downloads/prueba.pdf");
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
 
         //limpiar valores
         pedido = new Pedido();

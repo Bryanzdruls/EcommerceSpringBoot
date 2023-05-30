@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.BrianTorres.dao.IDomiciliarioRepo;
 import com.BrianTorres.model.Domiciliario;
+import com.BrianTorres.model.Pedido;
 
 @Service
 public class IDomiciliarioImp implements IDomiciliarioService{
@@ -33,6 +34,12 @@ public class IDomiciliarioImp implements IDomiciliarioService{
     @Override
     public Optional<Domiciliario> findByEmail(String email) {
         return domiciliarioRepo.findByEmail(email);
+    }
+
+    @Override
+    public void defaultDomi(Pedido pedido) {
+        Domiciliario domi= new Domiciliario(1L, "Mello","Hernandez", "mello@gmail.com", pedido);
+        domiciliarioRepo.save(domi);
     }
     
 }
