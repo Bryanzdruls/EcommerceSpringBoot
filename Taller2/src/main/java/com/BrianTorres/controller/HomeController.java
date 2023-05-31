@@ -29,7 +29,6 @@ import com.BrianTorres.service.IClienteService;
 import com.BrianTorres.service.IDomiciliarioService;
 import com.BrianTorres.service.IPedidoService;
 import com.BrianTorres.service.IProductoService;
-
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
@@ -76,7 +75,7 @@ public class HomeController {
         model.addAttribute("productos", productoService.findAll());
         //sesion
         model.addAttribute("sesion", session.getAttribute("idcliente"));
-        return "cliente/home";
+        return "/cliente/home";
     }
 
     @GetMapping("detalleProducto/{id}")
@@ -86,7 +85,7 @@ public class HomeController {
         Optional<Producto> productoOptional=productoService.get(id);
         producto=productoOptional.get();
         model.addAttribute("producto", producto);
-        return "cliente/productoHome";
+        return "/cliente/productoHome";
     }
 
     @PostMapping(value="/carrito")
@@ -106,7 +105,7 @@ public class HomeController {
             cantidadExedida=true;
             model.addAttribute("errorCantidad", cantidadExedida);
             model.addAttribute("producto", productoService.get(id).get());
-            return "cliente/productoHome";
+            return "/cliente/productoHome";
         }
 
         carrito.setCantidad(cantidad);
@@ -130,7 +129,7 @@ public class HomeController {
         model.addAttribute("pedido", pedido);
         //sesion
         model.addAttribute("sesion", session.getAttribute("idcliente"));
-        return "cliente/carrito";
+        return "/cliente/carrito";
     }
 
     @GetMapping("/eliminar/carrito/{id}")
@@ -154,7 +153,7 @@ public class HomeController {
         model.addAttribute("carrito", detalle);
         model.addAttribute("pedido", pedido);
         
-        return "cliente/carrito";
+        return "/cliente/carrito";
     }
     @GetMapping(value="getCarrito")
     public String getCarrito(Model model, HttpSession session) {
@@ -165,7 +164,7 @@ public class HomeController {
     model.addAttribute("sesion", session.getAttribute("idcliente"));
         
 
-        return "cliente/carrito";
+        return "/cliente/carrito";
     }
     
    @GetMapping("/pedido")
@@ -177,19 +176,14 @@ public class HomeController {
         model.addAttribute("cliente", cliente);
         //sesion
         model.addAttribute("sesion", session.getAttribute("idcliente"));
-        return "cliente/resumenpedido";
+        return "/cliente/resumenpedido";
     }
     @GetMapping("/guardarPedido")
-    public String guardarPedido(HttpSession session, HttpServletResponse response){
+    public String guardarPedido(HttpSession session){
 
 
         Date fechaDePedido = new Date();
         pedido.fechaPedido(fechaDePedido);
-
-
-
-
-        
         //usuario que realiza la orden
         Cliente cliente = clienteService.findById(Long.parseLong(session.getAttribute("idcliente").toString())).get();
         pedido.setCliente(cliente);
@@ -234,13 +228,22 @@ public class HomeController {
         pedido.setDomi(domi);
         domi.setPedidosAsignados(pedido);
         envioEmail.emailParaDomiciliario(domi, pedido);
+        
 
-        String mensaje ="";
+        //limpiar valores
+        pedido = new Pedido();
+       
+        detalle.clear();
+        return "redirect:/"; 
+    }
+    @GetMapping("/descargarPdf")
+    public void descargarPdf(HttpServletResponse respuesta){
         // Establecer el tipo de contenido de la respuesta
-        response.setContentType("application/pdf");
+        respuesta.setContentType("application/pdf");
 
         // Indicar al navegador que descargue el archivo con un nombre específico
-        response.setHeader("Content-Disposition", "attachment; factura.pdf");
+        respuesta.setHeader("Content-Disposition", "attachment; factura.pdf");
+        String mensaje ="";
         for (Carrito carrito : detalle) {
             mensaje = mensaje +(
                 "Nombre : "+carrito.getNombreProducto()+". "
@@ -248,26 +251,23 @@ public class HomeController {
                 +". Cantidad : "+carrito.getCantidad()+" unidades.\n");
         }
         try {
-            crearPdf.generatePdf(mensaje, detalle, response);
+            crearPdf.generatePdf(mensaje, detalle,respuesta);
             
         } catch (Exception e) {
             System.out.println("error: "+e);
         }
 
-        //limpiar valores
-        pedido = new Pedido();
-       
-        detalle.clear();
-        
-        return "redirect:/"; 
     }
     @PostMapping("/buscarproducto")
-    public String buscarProducto(@RequestParam(value="nombre") String busqueda, Model model){
+    public String buscarProducto(@RequestParam(value="nombre") String busqueda, Model model, HttpSession session){
         
         List<Producto> productos=productoService.findAll().stream()
         .filter(p ->p.getNombre().contains(busqueda)).collect(Collectors.toList());
         model.addAttribute("productos", productos);
-        return "cliente/home";
+        System.out.println("busqueda prueba: "+session.getAttribute("idcliente"));
+        model.addAttribute("sesion", session.getAttribute("idcliente"));
+
+        return "/cliente/home";
     }
 
     

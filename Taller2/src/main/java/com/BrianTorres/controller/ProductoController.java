@@ -48,21 +48,21 @@ public class ProductoController {
     @GetMapping("/listar")
     public String listar(Model model){
         model.addAttribute("producto", productoService.findAll());
-        return"producto/listar";
+        return "/producto/listar";
     }
 
     @GetMapping("/crear")
     public String crear(Model model){
         Producto producto =new Producto();
         model.addAttribute("producto", producto);
-        return "producto/crear";
+        return "/producto/crear";
     }
 
     @PostMapping("/guardar")
     public String guardar(@Valid Producto producto,BindingResult bindingResult,@RequestParam("imagen") MultipartFile file,   HttpSession session,SessionStatus estado, Model model) throws IOException{       
         if(!validarExtension(file)&& !file.isEmpty()){
             model.addAttribute("producto", producto);
-            return "producto/crear";
+            return "7producto/crear";
         }
         if(bindingResult.hasErrors()){
             if (bindingResult.hasFieldErrors("codigo")||
@@ -71,7 +71,7 @@ public class ProductoController {
                 bindingResult.hasFieldErrors("precio")||
                 bindingResult.hasFieldErrors("existencias")) {
                 model.addAttribute("producto", producto);
-                return "producto/crear";
+                return "/producto/crear";
         }
             }else {
                 
@@ -104,7 +104,7 @@ public class ProductoController {
         producto=opProducto.get();
         model.addAttribute("producto", producto);
 
-        return "producto/edit";
+        return "/producto/edit";
     }
 
     @PostMapping("/actualizar")
@@ -116,7 +116,7 @@ public class ProductoController {
                 bindingResult.hasFieldErrors("precio")||
                 bindingResult.hasFieldErrors("existencias")) {
                 model.addAttribute("producto", producto);
-                return "producto/edit";
+                return "/producto/edit";
              }
            
         }

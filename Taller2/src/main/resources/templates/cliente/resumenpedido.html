@@ -89,7 +89,7 @@
           <ul class="list-group">
             <li class="list-group-item"><h5 th:text="'Total: '+${pedido.subtotal} " > Total:</h5></li>
             <a th:href="@{/guardarPedido}" class="btn btn-dark">Generar</a>
-            <input type="button" id="wallet_container"></input>
+            <a th:href="@{/descargarPdf}" class="btn btn-dark">Descargar Pdf</a>
           </ul>
         </div>
       </div>

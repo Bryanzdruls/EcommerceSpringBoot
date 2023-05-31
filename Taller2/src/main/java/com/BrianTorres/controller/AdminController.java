@@ -41,7 +41,7 @@ public class AdminController {
         List<Producto> productos = productoService.findAll();
         model.addAttribute("productos", productos);
         
-        return "administrador/home";
+        return "/administrador/home";
     }
 
     @GetMapping("/clientes")
@@ -64,18 +64,18 @@ public class AdminController {
     public String listarDomi(Model model){
         model.addAttribute("domiciliario", domiciliarioService.findAll());
         model.addAttribute("errorDomi", false);
-        return "administrador/listarDomi";   
+        return "/administrador/listarDomi";   
     }
     @GetMapping("/domiciliarios")
     public String crearDomiciliario(Model model){
         if (domiciliarioService.findAll().isEmpty()) {
             Domiciliario domi= new Domiciliario();
             model.addAttribute("domiciliario", domi);
-            return "administrador/domiciliarios";
+            return "/administrador/domiciliarios";
         }else{
             model.addAttribute("errorDomi", !domiciliarioService.findAll().isEmpty());
             model.addAttribute("domiciliario", domiciliarioService.findAll());
-            return "administrador/listarDomi";
+            return "/administrador/listarDomi";
         }
     }
 
@@ -89,9 +89,9 @@ public class AdminController {
                 return "administrador/domiciliarios";
             }
             model.addAttribute("domiciliario",domiciliario);
-            return "administrador/domiciliarios";
+            return "/administrador/domiciliarios";
         }
         domiciliarioService.save(domiciliario);
-        return "administrador/listarDomiciliarios";
+        return "/administrador/listarDomiciliarios";
     }
 }

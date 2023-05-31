@@ -42,7 +42,7 @@ public class ClienteController {
     public String crear(Model model){
         Cliente cliente = new Cliente();
         model.addAttribute("cliente", cliente);
-        return "cliente/registro";
+        return "/cliente/registro";
     }
     
     @PostMapping("/guardar")
@@ -104,7 +104,7 @@ public class ClienteController {
         logger.info("pedidos {}", pedidos);
 
         model.addAttribute("pedidos", pedidos);
-        return "cliente/pedido";
+        return "/cliente/pedido";
     }
     @GetMapping("carrito/{id}")
     public String carritoPedido(@PathVariable Long id, HttpSession session, Model model){
@@ -113,7 +113,7 @@ public class ClienteController {
         model.addAttribute("carrito",pedido.get().getCarrito());
 
         model.addAttribute("session",session.getAttribute("idusuario"));
-        return "cliente/detallePedido";
+        return "/cliente/detallePedido";
     }
     @GetMapping("/cerrarSesion")
     public String cerrarSesion(HttpSession httpSession){
